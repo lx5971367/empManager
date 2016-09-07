@@ -7,9 +7,10 @@
 	if($id==1 && $password=="admin")
 	{
 	    header("Location:empManager.php");
+	    exit();
 	}
 	else 
 	{
-	    header("Location:login.php");
+	    header("Location:login.php?error=1");//携带一个信息回去
 	}
 ?>
