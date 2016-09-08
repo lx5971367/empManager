@@ -7,6 +7,8 @@
 	if($id==1 && $password=="admin")
 	{
 	    header("Location:empManager.php");
+	    //如果要跳转了，则最好带上exit();
+	    exit();
 	}
 	else 
 	{
