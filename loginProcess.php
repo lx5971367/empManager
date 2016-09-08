@@ -22,12 +22,12 @@
 	    die("连接失败".$mysqli->connect_error);   
 	}
 	$mysqli->query("set names utf8");
-	$res=$mysqli->query("select password from admin where id = $id");
+	$res=$mysqli->query("select password,name from admin where id = $id");
 	if($row=$res->fetch_assoc())
 	{
 	    if($row['password'] == $password)
 	    {
-	        header("Location:empManager.php");
+	        header("Location:empManager.php?name=".$row['name']."");//取出用户的名字
 	        exit();
 	    }
 	}
