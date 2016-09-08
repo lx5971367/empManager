@@ -14,7 +14,15 @@
 	   if(!empty($_GET['error']))//用empty函数判断是否GET到携带回来的参数
 	   {
 	       $error=$_GET['error'];//接收到location携带的参数
-	       echo "<font color='red' size='3'>用户名或密码错误</font>";
+	       if ($error==1)
+	       {
+	           echo "<font color='red' size='3'>用户名或密码错误</font>";
+	       }
+	       elseif ($error==2)
+	       {
+	           echo "<font color='red' size='3'>用户名或密码未填写</font>";
+	       }
+
 	   }
 	?>
 </html>

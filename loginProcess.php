@@ -2,7 +2,11 @@
 	//接收用户数据
 	$id=$_POST['id'];
 	$password=$_POST['password'];
-	
+	if(empty($id) or empty($password))
+	{
+	    header("Location:login.php?error=2");
+	    exit();
+	}
 	//简单验证，不到数据库
 	/*if($id==1 && $password=="admin")
 	{
@@ -25,7 +29,7 @@
 	$res=$mysqli->query("select password,name from admin where id = $id");
 	if($row=$res->fetch_assoc())
 	{
-	    if($row['password'] == $password)
+	    if($row['password'] == md5($password))
 	    {
 	        header("Location:empManager.php?name=".$row['name']."");//取出用户的名字
 	        exit();
