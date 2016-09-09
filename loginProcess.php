@@ -1,4 +1,5 @@
 <?php
+    require_once 'AdminService.class.php';
 	//接收用户数据
 	$id=$_POST['id'];
 	$password=$_POST['password'];
@@ -7,34 +8,18 @@
 	    header("Location:login.php?error=2");
 	    exit();
 	}
-	//简单验证，不到数据库
-	/*if($id==1 && $password=="admin")
+    
+	//实例化一个AdminService的方法 
+	$adminService=new AdminService();
+	$name=$adminService->checkAdmin($id, $password);
+	if($name!="")
 	{
-	    header("Location:empManager.php");
-	    //如果要跳转了，则最好带上exit();
+	    header("Location:empManager.php?name=$name");//取出用户的名字
 	    exit();
 	}
 	else 
 	{
-	    header("Location:login.php?error=1");//携带一个信息回去
-	}*/
-	
-	//用数据库的方法进行验证
-	$mysqli=new MySQLi("localhost","root","lx128SIMON","study");
-	if($mysqli->connect_error)
-	{
-	    die("连接失败".$mysqli->connect_error);   
+	    header("Location:login.php?error=1");
+	    exit();
 	}
-	$mysqli->query("set names utf8");
-	$res=$mysqli->query("select password,name from admin where id = $id");
-	if($row=$res->fetch_assoc())
-	{
-	    if($row['password'] == md5($password))
-	    {
-	        header("Location:empManager.php?name=".$row['name']."");//取出用户的名字
-	        exit();
-	    }
-	}
-	header("Location:login.php?error=1");
-	exit();
 ?>
