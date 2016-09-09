@@ -95,7 +95,7 @@
         $pageRangeNum['nextRangeStart']=$pageCount-4;
     }
     echo "<a href=empList.php?pageNow=".$pageRangeNum['preRangeStart']."><<</a>&nbsp";//连续向上翻5页
-    if($pageNow != $pageCount)//当当前页不是最后一页时，就显示5个翻页范围的数组 
+    if($pageNow != $pageCount && $pageCount>5)//当当前页不是最后一页时，就显示5个翻页范围的数组 
     {
         echo "<a href=?pageNow=".$pageRangeNum[0].">".$pageRangeNum[0]."</a>&nbsp";
         echo "<a href=?pageNow=".$pageRangeNum[1].">".$pageRangeNum[1]."</a>&nbsp";
@@ -103,7 +103,7 @@
         echo "<a href=?pageNow=".$pageRangeNum[3].">".$pageRangeNum[3]."</a>&nbsp";
         echo "<a href=?pageNow=".$pageRangeNum[4].">".$pageRangeNum[4]."</a>&nbsp";
     }
-    else //当前页是最后一页时
+    elseif($pageCount>5) //当前页是最后一页时
     {
         for($i=0;$i<=4;$i++)
         {
