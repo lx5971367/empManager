@@ -24,6 +24,23 @@
 	        return $res;
 	    }
 	    
+	    
+	    public function executeDqlArray($sql)//把结果集存入数组当中，这样就可以及时的释放结果集了
+	    {
+	        $arr=array();
+	        $res=$this->mysqli->query($sql) or die($this->mysqli->connect_error);
+	        $i=0;
+	        while ($row=$res->fetch_assoc())//把结果集的内容及时转移到数组中
+	        {
+	            $arr[$i++]=$row;
+	        }
+	        $res->close();//及时释放结果集
+	        return $arr;
+	        
+	    }
+	    
+	    
+	    
 	    public function executeDml($sql)
 	    {
 	        $b=$this->mysqli->query($sql);
@@ -44,6 +61,15 @@
 	            
 	        }
 	    }
+	    
+	    public function closeConnect()
+	    {
+	        if(!empty($this->mysqli))
+	        {
+	            $this->mysqli->close();
+	        }
+	    }
+	    
 	    
 	}
 ?>

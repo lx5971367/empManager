@@ -5,31 +5,21 @@
 	</head>
 </html>
 <?php
+    require_once 'EmpService.class.php';
 	//显示所有用户信息，用表格方式
-	$mysqli=new MySQLi("localhost","root","lx128SIMON","study");
-	if($mysqli->connect_error)
-	{
-	    die("连接失败".$mysqli->connect_error);
-	}
-	$mysqli->query("set names utf8");
+
 	//分页显示
 	$pageSize=25;//每个页面显示4条记录，自定义
 	$rowCount=0;//记录的总数，通过数据库取出数据
     $pageNow=1;//表示当前页，用户通过超链接选择,初始化显示第一页
-	$pageCount=0;//表示共有多少页，通过算法计算出来	
-	$sql="select count(id) from emp";//查询出共有多少个数据
-	$resCount=$mysqli->query($sql);
-	if($rowOne=$resCount->fetch_row())
-	{
-	    $rowCount=$rowOne[0];//得到rouCount的值
-	}
-	//计算共有多少页 
-	$pageCount=ceil($rowCount/$pageSize);
+	$empService=new EmpSerivce();
+    $pageCount=$empService->getPageCount($pageSize);//表示共有多少页，通过算法计算出来	
     //设计点击某一页，显示为当前页时，接收回传的参数 。pageNow的值
     if(!empty($_GET['pageNow']))
     {
         $pageNow=$_GET['pageNow'];
     }
+    /*
     if(!empty($_GET['pageChange']))//第二种分页方式用
     {
         $pageNow=$pageNow+$_GET['pageChange'];
@@ -41,15 +31,22 @@
         {
             $pageNow=$pageCount;
         }
-    }
-	$res=$mysqli->query("select * from emp limit ".$pageSize*($pageNow-1).",{$pageSize}");
+    }*/
 	echo "<table border=1>";
 	echo "<tr><td>id</td><td>name</td><td>email</td><td>level</td><td>change</td><td>delete</td></tr>";
-	while ($row=$res->fetch_assoc())
+	$arr=$empService->getEmplistByPage($pageNow, $pageSize);
+	for($i=0;$i<count($arr);$i++)//取出二维数组的值
+	{
+	    $row=$arr[$i];
+	    echo "<tr><td>{$row['id']}</td><td>{$row['name']}</td><td>{$row['email']}</td>".
+	    "<td>{$row['level']}</td><td><a href=#&id={$row['id']}>修改本行</a></td><td><a href=#&id={$row['id']}>删除本行</a></td></tr>";
+	    
+	}
+	/*while ($row=$res->fetch_assoc())
 	{
 	    echo "<tr><td>{$row['id']}</td><td>{$row['name']}</td><td>{$row['email']}</td>".
 	    "<td>{$row['level']}</td><td><a href=#&id={$row['id']}>修改本行</a></td><td><a href=#&id={$row['id']}>删除本行</a></td></tr>";
-	}
+	}*/
 	echo "</table>";
 	//第一种分页方式，每一页都用相应的数字显示
 	/*for($i=1;$i<=$pageCount;$i++)
@@ -120,9 +117,3 @@
 	<input type="text" name="pageNow">
 	<input type="submit" value="跳转">
 </form>
-<?php
-	$resCount->free();
-	$res->free();
-	$mysqli->close();
-	
-?>
