@@ -73,45 +73,44 @@
     echo  "<a href=empList.php?pageNow=".$pageCount.">尾页</a>&nbsp";
     echo "当前{$pageNow}页/共有{$pageCount}页";
     echo "</br>";
-    //实现批量翻页功能
-    $pageRange=ceil($pageNow/5);//表示在第几个翻页范围，每个翻页范围显示5页
-    $pageRangeNum=array();//每个翻页范围是一个等差数组
-    $pageRangeNum[0]=5*$pageRange-4;//初始化每个翻页范围的起始页
-    for($i=1;$i<=4;$i++)//按序添加每个翻页范围的等差数组
+    //改进版的实现批量翻页功能
+    $pageRangeNum=5;//每次实现批量翻几页
+    $pageRange=ceil($pageNow/$pageRangeNum);//表示在第几个翻页范围
+    if($pageCount>$pageRangeNum)//总页数大于$pageRangeNum时，实现批量翻页才会有意义
     {
-        $pageRangeNum[$i]=$pageRangeNum[$i-1]+1;
-    }
-    $pageRangeNum['preRangeStart']=$pageRangeNum[0]-5;//上一页翻页范围的起始页
-    if($pageRangeNum['preRangeStart']<1)
-    {
-        $pageRangeNum['preRangeStart']=1;
-    }
-    $pageRangeNum['nextRangeStart']=$pageRangeNum[0]+5;//下一页翻页范围的起始页
-    if($pageRangeNum['nextRangeStart']>$pageCount)
-    {
-        $pageRangeNum['nextRangeStart']=$pageCount-4;
-    }
-    echo "<a href=empList.php?pageNow=".$pageRangeNum['preRangeStart']."><<</a>&nbsp";//连续向上翻5页
-    if($pageNow != $pageCount && $pageCount>5)//当当前页不是最后一页时，就显示5个翻页范围的数组 
-    {
-        echo "<a href=?pageNow=".$pageRangeNum[0].">".$pageRangeNum[0]."</a>&nbsp";
-        echo "<a href=?pageNow=".$pageRangeNum[1].">".$pageRangeNum[1]."</a>&nbsp";
-        echo "<a href=?pageNow=".$pageRangeNum[2].">".$pageRangeNum[2]."</a>&nbsp";
-        echo "<a href=?pageNow=".$pageRangeNum[3].">".$pageRangeNum[3]."</a>&nbsp";
-        echo "<a href=?pageNow=".$pageRangeNum[4].">".$pageRangeNum[4]."</a>&nbsp";
-    }
-    elseif($pageCount>5) //当前页是最后一页时
-    {
-        for($i=0;$i<=4;$i++)
+        $pageRangeNumStart=1+($pageRange-1)*$pageRangeNum;//每一个翻页范围的起始值是一个等差数组
+        $pageRangeNumStartTemp=$pageRangeNumStart;//把起始值储存起来 ，以便做循环使用
+        $pageRangeNumPreStart=$pageRangeNumStart-$pageRangeNum;//上一页翻页范围的起始页
+        if($pageRangeNumPreStart<1)
         {
-            if($pageRangeNum[$i]<=$pageCount)
+            $pageRangeNumPreStart=1;
+        }
+        $pageRangeNumNextStart=$pageRangeNumStart+$pageRangeNum;//下一页翻页范围的起始页
+        echo "<a href=empList.php?pageNow=".$pageRangeNumPreStart."><<</a>&nbsp";//连续向上翻页
+        if($pageNow < ($pageCount-($pageCount%$pageRangeNum)+1))//当当前页不是最后一个翻页范围或最后一个翻页范围的页数与$pageRangeNum相等时
+        {
+            if($pageRangeNumNextStart>$pageCount)//当在最后一个翻页范围时
             {
-                echo "<a href=?pageNow=".$pageRangeNum[$i].">".$pageRangeNum[$i]."</a>&nbsp";
+                $pageRangeNumNextStart=$pageCount-$pageRangeNum+1;//向下翻页链接的值就直接设置为本页的开始值
+            }
+            for(;$pageRangeNumStart<$pageRangeNumStartTemp+$pageRangeNum;$pageRangeNumStart++)//按序添加每个翻页范围的等差数组
+            {
+                echo "<a href=empList.php?pageNow=".$pageRangeNumStart.">".$pageRangeNumStart."</a>&nbsp";
             }
         }
+        elseif($pageNow >= ($pageCount-($pageCount%$pageRangeNum)+1)) //当当前页在最后一个翻页范围时,且最后一个翻页范围的页数小于$pageRangeNum，按实际需求显示几个分页链接
+        {
+            $pageRangeNumNextStart=$pageRangeNumStart;//向下翻页链接的值就直接设置为本页的开始值
+            for(;$pageRangeNumStart<$pageRangeNumStartTemp+$pageRangeNum;$pageRangeNumStart++)
+            {
+                if($pageRangeNumStart<=$pageCount)
+                {
+                    echo "<a href=empList.php?pageNow=".$pageRangeNumStart.">".$pageRangeNumStart."</a>&nbsp";
+                }
+            }
+        }
+        echo "<a href=empList.php?pageNow=".$pageRangeNumNextStart.">>></a>"; //连接向下翻页
     }
-    echo "<a href=empList.php?pageNow=".$pageRangeNum['nextRangeStart'].">>></a>"; //连接向下翻5页 
-    //指定跳转到某一页
 ?>
 <form action="empList.php">
 	<input type="text" name="pageNow">
