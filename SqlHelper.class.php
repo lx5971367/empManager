@@ -34,9 +34,33 @@
 	        {
 	            $arr[$i++]=$row;
 	        }
-	        $res->close();//及时释放结果集
+	        $res->free();//及时释放结果集
 	        return $arr;
 	        
+	    }
+	    
+	    
+	    //这是一个通用的，并体现了面向对象编程的思想 。
+	    public function executeDqlFenYe($sql1,$sql2,&$fenYePage)//引用传递，利用这个函数，把FenYePage中的成员变量的值利用实例$fenYePage得到，
+	    {
+	        $arr=array();
+	        $res=$this->mysqli->query($sql1) or die($this->mysqli->connect_error);
+	        $i=0;
+	        while ($row=$res->fetch_row())
+	        {
+	            $arr[$i++]=$row;
+	        }
+	        $res->free();
+	        $fenYePage->resArray=$arr;
+	        
+	        $res2=$this->mysqli->query($sql2) or die($this->mysqli->connect_error);
+	        if($row=$res2->fetch_row())
+	        {
+	            $fenYePage->rowCount=$row[0];
+	            $fenYePage->pageCount=ceil($row[0]/$fenYePage->pageSize);
+	        }
+	        $res2->free();
+       
 	    }
 	    
 	    

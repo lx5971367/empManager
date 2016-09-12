@@ -74,24 +74,24 @@
     echo "当前{$pageNow}页/共有{$pageCount}页";
     echo "</br>";
     //改进版的实现批量翻页功能
-    $pageRangeNum=5;//每次实现批量翻几页
+    $pageRangeNum=10;//每次实现批量翻几页
     $pageRange=ceil($pageNow/$pageRangeNum);//表示在第几个翻页范围
     if($pageCount>$pageRangeNum)//总页数大于$pageRangeNum时，实现批量翻页才会有意义
     {
         $pageRangeNumStart=1+($pageRange-1)*$pageRangeNum;//每一个翻页范围的起始值是一个等差数组
         $pageRangeNumStartTemp=$pageRangeNumStart;//把起始值储存起来 ，以便做循环使用
-        $pageRangeNumPreStart=$pageRangeNumStart-$pageRangeNum;//上一页翻页范围的起始页
-        if($pageRangeNumPreStart<1)
+        $pageRangePreNumStart=$pageRangeNumStart-$pageRangeNum;//上一页翻页范围的起始页
+        if($pageRangePreNumStart<1)
         {
-            $pageRangeNumPreStart=1;
+            $pageRangePreNumStart=1;
         }
-        $pageRangeNumNextStart=$pageRangeNumStart+$pageRangeNum;//下一页翻页范围的起始页
-        echo "<a href=empList.php?pageNow=".$pageRangeNumPreStart."><<</a>&nbsp";//连续向上翻页
+        $pageRangeNextNumStart=$pageRangeNumStart+$pageRangeNum;//下一页翻页范围的起始页
+        echo "<a href=empList.php?pageNow=".$pageRangePreNumStart."><<</a>&nbsp";//连续向上翻页
         if($pageNow < ($pageCount-($pageCount%$pageRangeNum)+1))//当当前页不是最后一个翻页范围或最后一个翻页范围的页数与$pageRangeNum相等时
         {
-            if($pageRangeNumNextStart>$pageCount)//当在最后一个翻页范围时
+            if($pageRangeNextNumStart>$pageCount)//当在最后一个翻页范围时
             {
-                $pageRangeNumNextStart=$pageCount-$pageRangeNum+1;//向下翻页链接的值就直接设置为本页的开始值
+                $pageRangeNextNumStart=$pageCount-$pageRangeNum+1;//向下翻页链接的值就直接设置为本页的开始值
             }
             for(;$pageRangeNumStart<$pageRangeNumStartTemp+$pageRangeNum;$pageRangeNumStart++)//按序添加每个翻页范围的等差数组
             {
@@ -100,7 +100,7 @@
         }
         elseif($pageNow >= ($pageCount-($pageCount%$pageRangeNum)+1)) //当当前页在最后一个翻页范围时,且最后一个翻页范围的页数小于$pageRangeNum，按实际需求显示几个分页链接
         {
-            $pageRangeNumNextStart=$pageRangeNumStart;//向下翻页链接的值就直接设置为本页的开始值
+           
             for(;$pageRangeNumStart<$pageRangeNumStartTemp+$pageRangeNum;$pageRangeNumStart++)
             {
                 if($pageRangeNumStart<=$pageCount)
@@ -108,8 +108,9 @@
                     echo "<a href=empList.php?pageNow=".$pageRangeNumStart.">".$pageRangeNumStart."</a>&nbsp";
                 }
             }
+            $pageRangeNextNumStart=$pageCount;//向下翻页链接的值就直接设置为本页的结束值
         }
-        echo "<a href=empList.php?pageNow=".$pageRangeNumNextStart.">>></a>"; //连接向下翻页
+        echo "<a href=empList.php?pageNow=".$pageRangeNextNumStart.">>></a>"; //连接向下翻页
     }
 ?>
 <form action="empList.php">

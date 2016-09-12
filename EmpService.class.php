@@ -31,5 +31,17 @@
 	        $sqlHelper->closeConnect();
 	        return $arr;
 	    }
+	    
+	    public function getFenYePage($fenYePage)
+	    {
+	        $sqlHelper=new SqlHelper();
+	        $sql1="select * from emp limit ".($fenYePage->pageNow-1)*$fenYePage->pageSize.",$fenYePage->pageNow";
+	        $sql2="select count(id) from emp";
+	        $sqlHelper->executeDqlFenYe($sql1, $sql2, $fenYePage);
+	    }
+	    
+	    
+	    
+	    
 	}
 ?>
