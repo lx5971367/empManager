@@ -65,18 +65,18 @@
 	        
 	        //第三种分页方式，上一页，下一页的分页方式
 	        $navigate="";
-	        $navigate="<a href=empList.php?pageNow=1>首页</a>&nbsp";
+	        $navigate="<a href={$fenYePage->gotoUrl}?pageNow=1>首页</a>&nbsp";
 	        if($fenYePage->pageNow>1)
 	        {
 	            $pagePre=$fenYePage->pageNow-1;
-	            $navigate.="<a href=empList.php?pageNow=".$pagePre.">上一页</a>&nbsp";
+	            $navigate.="<a href={$fenYePage->gotoUrl}?pageNow=".$pagePre.">上一页</a>&nbsp";
 	        }
 	        if($fenYePage->pageNow<$fenYePage->pageCount)
 	        {
 	            $pageNex=$fenYePage->pageNow+1;
-	            $navigate.="<a href=empList.php?pageNow=".$pageNex.">下一页</a>&nbsp";
+	            $navigate.="<a href={$fenYePage->gotoUrl}?pageNow=".$pageNex.">下一页</a>&nbsp";
 	        }
-	        $navigate.="<a href=empList.php?pageNow=".$fenYePage->pageCount.">尾页</a>&nbsp";
+	        $navigate.="<a href={$fenYePage->gotoUrl}?pageNow=".$fenYePage->pageCount.">尾页</a>&nbsp";
 	        $navigate.="当前{$fenYePage->pageNow}页/共有{$fenYePage->pageCount}页";
 	        $fenYePage->navigate=$navigate;
 	        
@@ -97,7 +97,7 @@
 	                $pageRangePreNumStart=1;
 	            }
 	            $pageRangeNextNumStart=$pageRangeNumStart+$pageRangeNum;//下一页翻页范围的起始页
-	            $navigateBatch="<a href=empList.php?pageNow=".$pageRangePreNumStart."><<</a>&nbsp";//连续向上翻页
+	            $navigateBatch="<a href={$fenYePage->gotoUrl}?pageNow=".$pageRangePreNumStart."><<</a>&nbsp";//连续向上翻页
 	            if($fenYePage->pageNow < ($fenYePage->pageCount-($fenYePage->pageCount%$pageRangeNum)+1))//当当前页不是最后一个翻页范围或最后一个翻页范围的页数与$pageRangeNum相等时
 	            {
 	                if($pageRangeNextNumStart>$fenYePage->pageCount)//当在最后一个翻页范围时
@@ -106,7 +106,7 @@
 	                }
 	                for(;$pageRangeNumStart<$pageRangeNumStartTemp+$pageRangeNum;$pageRangeNumStart++)//按序添加每个翻页范围的等差数组
 	                {
-	                    $navigateBatch.="<a href=empList.php?pageNow=".$pageRangeNumStart.">".$pageRangeNumStart."</a>&nbsp";
+	                    $navigateBatch.="<a href={$fenYePage->gotoUrl}?pageNow=".$pageRangeNumStart.">".$pageRangeNumStart."</a>&nbsp";
 	                }
 	            }
 	            elseif($fenYePage->pageNow >= ($fenYePage->pageCount-($fenYePage->pageCount%$pageRangeNum)+1)) //当当前页在最后一个翻页范围时,且最后一个翻页范围的页数小于$pageRangeNum，按实际需求显示几个分页链接
@@ -116,12 +116,12 @@
 	                {
 	                    if($pageRangeNumStart<=$fenYePage->pageCount)
 	                    {
-	                         $navigateBatch.="<a href=empList.php?pageNow=".$pageRangeNumStart.">".$pageRangeNumStart."</a>&nbsp";
+	                         $navigateBatch.="<a href={$fenYePage->gotoUrl}?pageNow=".$pageRangeNumStart.">".$pageRangeNumStart."</a>&nbsp";
 	                    }
 	                }
 	                $pageRangeNextNumStart=$fenYePage->pageCount;//向下翻页链接的值就直接设置为本页的结束值
 	            }
-	             $navigateBatch.="<a href=empList.php?pageNow=".$pageRangeNextNumStart.">>></a>"; //连接向下翻页
+	             $navigateBatch.="<a href={$fenYePage->gotoUrl}?pageNow=".$pageRangeNextNumStart.">>></a>"; //连接向下翻页
 	             $fenYePage->navigateBatch=$navigateBatch;
 	        }
 	    }
@@ -134,15 +134,18 @@
 	        if(!$b)
 	        {
 	            die("操作失败".$this->mysqli->connect_error);
+	            return 0;
 	        }
 	        else 
 	        {
 	            if($this->mysqli->affected_rows>0)
 	            {
+	                return 1;
 	                echo "操作成功";
 	            }
 	            else 
 	            {
+	                return 2;
 	                echo "没有影响到行数";
 	            }
 	            

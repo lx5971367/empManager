@@ -16,6 +16,7 @@
         $fenYePage->pageNow=$_GET['pageNow'];
     }
     $fenYePage->pageSize=6;
+    $fenYePage->gotoUrl="empList.php";
     $empService=new EmpSerivce();
     $empService->getFenYePage($fenYePage);//调用该函数后，$fenYePage里的所有成员变量的值都有了
     
@@ -23,12 +24,12 @@
 	//显示所有用户信息，用表格方式
 
 	echo "<table border=1>";
-	echo "<tr><td>id</td><td>name</td><td>email</td><td>level</td><td>change</td><td>delete</td></tr>";
+	echo "<tr><td>id</td><td>name</td><td>email</td><td>level</td><td>insert</td><td>update</td><td>delete</td></tr>";
 	for($i=0;$i<count($fenYePage->resArray);$i++)//取出二维数组的值
 	{
 	    $row=$fenYePage->resArray[$i];
 	    echo "<tr><td>{$row['id']}</td><td>{$row['name']}</td><td>{$row['email']}</td>".
-	    "<td>{$row['level']}</td><td><a href=#&id={$row['id']}>修改本行</a></td><td><a href=#&id={$row['id']}>删除本行</a></td></tr>";
+	    "<td>{$row['level']}</td><td><a href=#&id={$row['id']}>增加一行</a></td><td><a href=#&id={$row['id']}>修改本行</a></td><td><a href='empProcess.php?flag=delete&id={$row['id']}'>删除本行</a></td></tr>";
 	    
 	}
 	echo "</table>";

@@ -41,6 +41,14 @@
 	        $sqlHelper->closeConnect();
 	    }
 	    
+	    public function deleteRow($id)
+	    {
+	        $sqlHelper=new SqlHelper();
+	        $sql="delete from emp where id = $id";
+	        return $sqlHelper->executeDml($sql);
+	        $sqlHelper->closeConnect();
+	    }
+	    
 	    
 	    
 	    
