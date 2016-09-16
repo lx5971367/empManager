@@ -4,7 +4,7 @@
 	</head>
 	<h1>主界面</h1>
 		<a href="empList.php">管理用户</a></br>
-		<a href="#">添加用户</a></br>
+		<a href="empInsert.php">添加用户</a></br>
 		<a href="#">删除用户</a></br>
 		<a href="#">退出系统</a></br>
 </html>

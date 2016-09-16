@@ -1,6 +1,6 @@
 <?php
     require_once 'SqlHelper.class.php';
-	class EmpSerivce
+	class EmpService
 	{
 	    /*private $sqlHelper;//如果用构造函数的方法来实例化，则不能在每个成员函数中去关闭连接，因为在一个函数中关闭了连接，等于把实例化也关闭掉了。
 	    
@@ -45,6 +45,15 @@
 	    {
 	        $sqlHelper=new SqlHelper();
 	        $sql="delete from emp where id = $id";
+	        return $sqlHelper->executeDml($sql);
+	        $sqlHelper->closeConnect();
+	    }
+	    
+	    public function insertRow($emp)
+	    {
+	        $sqlHelper=new SqlHelper();
+	        $sql="insert into emp (name,email,level) values ('".$emp->name."','".$emp->email."',".$emp->level.")";//如果插入的是字符
+	        //一定不要忘记了字符的格式，要不然会插入不成功
 	        return $sqlHelper->executeDml($sql);
 	        $sqlHelper->closeConnect();
 	    }
