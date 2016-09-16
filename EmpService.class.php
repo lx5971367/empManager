@@ -45,8 +45,9 @@
 	    {
 	        $sqlHelper=new SqlHelper();
 	        $sql="delete from emp where id = $id";
-	        return $sqlHelper->executeDml($sql);
+	        $b=$sqlHelper->executeDml($sql);
 	        $sqlHelper->closeConnect();
+	        return $b;
 	    }
 	    
 	    public function insertRow($emp)
@@ -54,8 +55,34 @@
 	        $sqlHelper=new SqlHelper();
 	        $sql="insert into emp (name,email,level) values ('".$emp->name."','".$emp->email."',".$emp->level.")";//如果插入的是字符
 	        //一定不要忘记了字符的格式，要不然会插入不成功
-	        return $sqlHelper->executeDml($sql);
+	        $b=$sqlHelper->executeDml($sql);
 	        $sqlHelper->closeConnect();
+	        return $b;
+	    }
+	    
+	    
+	    public function getEmpById($id)
+	    {
+	        $sqlHelper=new SqlHelper();
+	        $sql="select * from emp where id = $id";
+	        $arr=$sqlHelper->executeDqlArray($sql);
+	        //把数据二次封装到实例中,用面向对象的思想，封装一个实例，再把实例返回
+	        $emp=new Emp();
+	        $emp->id=$arr[0]['id'];
+	        $emp->name=$arr[0]['name'];
+	        $emp->email=$arr[0]['email'];
+	        $emp->level=$arr[0]['level'];
+	        $sqlHelper->closeConnect();
+	        return $emp;
+	    }
+	    
+	    public function updateRow($emp)
+	    {
+	        $sqlHelper=new SqlHelper();
+	        $sql="update emp set name='".$emp->name."',email='".$emp->email."',level='".$emp->level."' where id='".$emp->id."'";
+	        $b=$sqlHelper->executeDml($sql);
+	        $sqlHelper->closeConnect();
+	        return $b;
 	    }
 	    
 	    

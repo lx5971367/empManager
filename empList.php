@@ -29,7 +29,7 @@
 	{
 	    $row=$fenYePage->resArray[$i];
 	    echo "<tr><td>{$row['id']}</td><td>{$row['name']}</td><td>{$row['email']}</td>".
-	    "<td>{$row['level']}</td><td><a href=#&id={$row['id']}>修改本行</a></td><td><a href='empProcess.php?flag=delete&id={$row['id']}'>删除本行</a></td></tr>";
+	    "<td>{$row['level']}</td><td><a href='empUpdate.php?id={$row['id']}'>修改本行</a></td><td><a href='empProcess.php?flag=delete&id={$row['id']}'>删除本行</a></td></tr>";
 	    
 	}
 	echo "</table>";
